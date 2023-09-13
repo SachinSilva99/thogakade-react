@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ navItems }: { navItems: string[] }) => {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -23,35 +23,15 @@ const NavBar = () => {
                     id="navbarSupportedContent"
                 >
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
+                        {navItems.map((item) => (
                             <Link
                                 className="nav-link active"
                                 aria-current="page"
-                                to="/home"
+                                to={item}
                             >
-                                Home
+                                {item}
                             </Link>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#customers">
-                                Customers
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#orders">
-                                Orders
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#items">
-                                Items
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#placeOrder">
-                                Place Order
-                            </a>
-                        </li>
+                        ))}
                     </ul>
                     <div className="avatar-container nav-item">
                         <div className="avatar">
