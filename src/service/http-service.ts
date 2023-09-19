@@ -1,10 +1,10 @@
 import apiClient from "./api-client";
 
-export interface StandardResponse<T>{
-    code:bigint;
-    msg:string;
-    data:T
-} 
+export interface StandardResponse<T> {
+    code: bigint;
+    msg: string;
+    data: T
+}
 
 class HttpService {
     endpoint: string;
@@ -18,26 +18,27 @@ class HttpService {
         const request = apiClient.get<StandardResponse<T[]>>(this.endpoint, {
             signal: controller.signal,
         });
-        return { request, cancel: () => controller.abort() };
+        return {request, cancel: () => controller.abort()};
     }
-    get<T>() {
+
+    get<T>(id: string) {
         const controller = new AbortController();
-        const request = apiClient.get<StandardResponse<T>>(this.endpoint, {
+        const request = apiClient.get<StandardResponse<T>>(this.endpoint + "/" + id, {
             signal: controller.signal,
         });
-        return { request, cancel: () => controller.abort() };
+        return {request, cancel: () => controller.abort()};
     }
 
     delete(id: string) {
-        return apiClient.delete(this.endpoint + id);
+        return apiClient.delete(this.endpoint + "/" + id);
     }
 
     update<T>(id: string, entity: T) {
-        return apiClient.patch(this.endpoint + id, entity);
+        return apiClient.patch(this.endpoint + "/" + id, entity);
     }
 
     create<T>(entity: T) {
-         return apiClient.post(this.endpoint, entity);
+        return apiClient.post(this.endpoint, entity);
     }
 }
 

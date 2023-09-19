@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import customerService, { Customer } from "../service/customer-service";
+import customerService, {Customer} from "../service/customer-service";
 import { CanceledError } from "axios";
 
 const useCustomers = () => {
@@ -9,7 +9,7 @@ const useCustomers = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        const { request, cancel } = customerService.getAll();
+        const { request, cancel } = customerService.getAll<Customer>();
         request
             .then((res) => {
                 console.log(res);

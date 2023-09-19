@@ -2,7 +2,6 @@ import {useRef} from "react";
 import useCustomers from "../hook/use-customer.ts";
 import customerService, {Customer} from "../service/customer-service.ts";
 
-// import useCustomers from "../hook/use-customer";
 
 const CustomerComponent = () => {
     const idRef = useRef<HTMLInputElement>(null);
@@ -11,27 +10,36 @@ const CustomerComponent = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
 
-    const {customers,setCustomers} = useCustomers();
+    const {customers, setCustomers} = useCustomers();
 
 
-        function handleAddOnClick() {
-            if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
-                alert("null");
-                return;
-            }
-            const customer: Customer = {
-                id: idRef.current.value,
-                name: nameRef.current.value,
-                address: addressRef.current.value
-            };
-            customerService.create<Customer>(customer).then(r => {
-                console.log(r);
-                if (r.status === 201) {
-                    setCustomers([...customers, customer]);
-                }
-            });
-            console.log("hello");
+    function handleAddOnClick() {
+        if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
+            alert("null");
+            return;
         }
+        const customer: Customer = {
+            id: idRef.current.value,
+            name: nameRef.current.value,
+            address: addressRef.current.value
+        };
+        customerService.create<Customer>(customer).then(r => {
+            console.log(r);
+            if (r.status === 201) {
+                setCustomers([...customers, customer]);
+            }
+        });
+        console.log("hello");
+    }
+
+    function deleteCustomer(id: string) {
+        customerService.delete(id).then((res) => {
+            if (res.status === 204) {
+                const updatedCustomers = customers.filter((customer) => customer.id !== id);
+                setCustomers(updatedCustomers);
+            }
+        });
+    }
 
     return (
         <>
@@ -109,7 +117,7 @@ const CustomerComponent = () => {
                         <td>{customer.name}</td>
                         <td>{customer.address}</td>
                         <td>
-                            <button className="btn btn-danger" onClick={() => console.log(customer.id)}>
+                            <button className="btn btn-danger" onClick={() => deleteCustomer(customer.id)}>
                                 Delete
                             </button>
                         </td>
