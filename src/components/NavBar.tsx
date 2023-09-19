@@ -25,6 +25,7 @@ const NavBar = ({ navItems }: { navItems: string[] }) => {
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         {navItems.map((item) => (
                             <Link
+                                key={item}
                                 className="nav-link active"
                                 aria-current="page"
                                 to={item}
