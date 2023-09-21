@@ -1,4 +1,5 @@
-import create from "./http-service";
+import create, {HttpService} from "./http-service";
+
 
 export interface Customer {
     id: string;
@@ -7,8 +8,13 @@ export interface Customer {
 }
 
 export class CustomerService {
+    private apiClient: HttpService;
 
-    apiClient = create("/customers");
+
+    constructor() {
+        this.apiClient = create("/customers");
+    }
+
 
     create(customer: Customer) {
         this.apiClient.create(customer).then(r => {
@@ -18,22 +24,41 @@ export class CustomerService {
             }
         });
     }
-    delete(id:string){
+
+    delete(id: string) {
         this.apiClient.delete(id).then((res) => {
-            if (res.status === 204) { /* empty */ } else {
+            if (res.status === 204) { /* empty */
+            } else {
                 throw Error("delete error");
             }
         });
     }
-    update(id:string, customer :Customer){
+
+    update(id: string, customer: Customer) {
 
         this.apiClient.update(id, customer).then((res) => {
             console.log(res);
-            if (res.status === 204){ /* empty */ } else {
+            if (res.status === 204) { /* empty */
+            } else {
                 throw Error("update error");
             }
         });
     }
+
+    async getAll(): Promise<Customer[]> {
+        try {
+            console.log(this.apiClient);
+            const { request } = this.apiClient.getAll<Customer>();
+            const res = await request;
+
+            console.log(res);
+            return res.data.data;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            throw error; // Rethrow the error for the caller to handle
+        }
+    }
+
 }
 
 export default new CustomerService();

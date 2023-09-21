@@ -6,8 +6,8 @@ export interface StandardResponse<T> {
     data: T
 }
 
-class HttpService {
-    endpoint: string;
+export class HttpService {
+    private endpoint: string;
 
     constructor(endpoint: string) {
         this.endpoint = endpoint;

@@ -1,6 +1,6 @@
 import {useRef} from "react";
 import useCustomers from "../hook/use-customer.ts";
-import customerService, {Customer} from "../service/customer-service.ts";
+import customerService, {Customer} from "../service/customer-service";
 
 
 const CustomerComponent = () => {
@@ -9,6 +9,7 @@ const CustomerComponent = () => {
     const addressRef = useRef<HTMLInputElement>(null);
     const {customers, setCustomers} = useCustomers();
 
+    console.log(customers);// why customer array is empty?
 
     function handleAddOnClick() {
         if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
