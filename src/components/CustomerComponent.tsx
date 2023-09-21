@@ -5,11 +5,8 @@ import customerService, {Customer} from "../service/customer-service.ts";
 
 const CustomerComponent = () => {
     const idRef = useRef<HTMLInputElement>(null);
-
-    // const { customers, error, isLoading } = useCustomers();
     const nameRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
-
     const {customers, setCustomers} = useCustomers();
 
 
@@ -23,22 +20,45 @@ const CustomerComponent = () => {
             name: nameRef.current.value,
             address: addressRef.current.value
         };
-        customerService.create<Customer>(customer).then(r => {
-            console.log(r);
-            if (r.status === 201) {
-                setCustomers([...customers, customer]);
-            }
-        });
-        console.log("hello");
+        customerService.create(customer);
+        setCustomers([...customers, customer]);
     }
 
     function deleteCustomer(id: string) {
-        customerService.delete(id).then((res) => {
-            if (res.status === 204) {
-                const updatedCustomers = customers.filter((customer) => customer.id !== id);
-                setCustomers(updatedCustomers);
-            }
+        customerService.delete(id);
+        const updatedCustomers = customers.filter((customer) => customer.id !== id);
+        setCustomers(updatedCustomers);
+    }
+
+    function handleUpdateOnClick() {
+        if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
+            alert("null");
+            return;
+        }
+
+        const customer: Customer = {
+            id: idRef.current.value,
+            name: nameRef.current.value,
+            address: addressRef.current.value
+        };
+
+        customerService.update(customer.id, customer);
+        const updatedCustomers = customers.map((customer) => {
+            return customer.id === customer.id ?
+                {...customer, name: customer.name, address: customer.address} : customer;
         });
+        setCustomers(updatedCustomers);
+    }
+
+    function trOnClick(id: string) {
+        const customer = customers.find(c => c.id === id);
+        if (!customer) {
+            alert("null");
+            return;
+        }
+        idRef.current!.value = customer.id;
+        nameRef.current!.value = customer.name;
+        addressRef.current!.value = customer.address;
     }
 
     return (
@@ -86,7 +106,7 @@ const CustomerComponent = () => {
                     <button type="submit" className="btn btn-success" onClick={handleAddOnClick}>
                         Add
                     </button>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-primary" onClick={handleUpdateOnClick}>
                         Update
                     </button>
                 </div>
@@ -112,7 +132,7 @@ const CustomerComponent = () => {
                 </thead>
                 <tbody id="customerTbl">
                 {customers.map((customer, index) => (
-                    <tr key={index}>
+                    <tr key={index} onClick={() => trOnClick(customer.id)}>
                         <td>{customer.id}</td>
                         <td>{customer.name}</td>
                         <td>{customer.address}</td>
