@@ -1,20 +1,21 @@
 import create, { HttpService } from "./http-service";
 
-export interface Customer {
-    id: string;
-    name: string;
-    address: string;
+export interface Item {
+    code: string;
+    description: string;
+    unitPrice: number;
+    qtyOnHand: number;
 }
 
-export class CustomerService {
+export class ItemService {
     private readonly apiClient: HttpService;
 
     constructor() {
-        this.apiClient = create("/customers");
+        this.apiClient = create("/items");
     }
 
-    create(customer: Customer) {
-        this.apiClient.create(customer).then((r) => {
+    create(item: Item) {
+        this.apiClient.create(item).then((r) => {
             if (r.status !== 201) {
                 throw Error("creating error");
             }
@@ -29,8 +30,8 @@ export class CustomerService {
         });
     }
 
-    update(id: string, customer: Customer) {
-        this.apiClient.update(id, customer).then((res) => {
+    update(id: string, item: Item) {
+        this.apiClient.update(id, item).then((res) => {
             console.log(res);
             if (res.status === 204) {
                 throw Error("update error");
@@ -38,11 +39,12 @@ export class CustomerService {
         });
     }
 
-    async getAll(): Promise<Customer[]> {
+    async getAll(): Promise<Item[]> {
         try {
-            console.log(this.apiClient);
-            const { request } = this.apiClient.getAll<Customer>();
+            const { request } = this.apiClient.getAll<Item>();
             const res = await request;
+            console.log(res);
+
             return res.data.data;
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -51,4 +53,4 @@ export class CustomerService {
     }
 }
 
-export default new CustomerService();
+export default new ItemService();

@@ -1,30 +1,31 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import {RouterProvider, createBrowserRouter} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./components/Home.tsx";
 import CustomerComponent from "./components/CustomerComponent.tsx";
+import ItemComponent from "./components/ItemComponent.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App/>,
+        element: <App />,
         children: [
             {
                 path: "home",
-                element: <Home/>,
+                element: <Home />,
             },
             {
                 path: "",
-                element: <Home/>,
+                element: <Home />,
             },
             {
                 path: "/customers",
-                element: <CustomerComponent/>,
+                element: <CustomerComponent />,
             },
             {
                 path: "/items",
-                element: <h1>items</h1>,
+                element: <ItemComponent />,
             },
             {
                 path: "/placeOrder",
@@ -34,5 +35,5 @@ const router = createBrowserRouter([
     },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
 );

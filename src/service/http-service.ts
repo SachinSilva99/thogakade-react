@@ -3,7 +3,7 @@ import apiClient from "./api-client";
 export interface StandardResponse<T> {
     code: bigint;
     msg: string;
-    data: T
+    data: T;
 }
 
 export class HttpService {
@@ -18,15 +18,18 @@ export class HttpService {
         const request = apiClient.get<StandardResponse<T[]>>(this.endpoint, {
             signal: controller.signal,
         });
-        return {request, cancel: () => controller.abort()};
+        return { request, cancel: () => controller.abort() };
     }
 
     get<T>(id: string) {
         const controller = new AbortController();
-        const request = apiClient.get<StandardResponse<T>>(this.endpoint + "/" + id, {
-            signal: controller.signal,
-        });
-        return {request, cancel: () => controller.abort()};
+        const request = apiClient.get<StandardResponse<T>>(
+            this.endpoint + "/" + id,
+            {
+                signal: controller.signal,
+            }
+        );
+        return { request, cancel: () => controller.abort() };
     }
 
     delete(id: string) {

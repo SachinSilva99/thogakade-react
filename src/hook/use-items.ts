@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import customerService, { Customer } from "../service/customer-service";
+import itemService, { Item } from "../service/item-service";
 
 const useCustomers = () => {
-    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const data = await customerService.getAll();
-                setCustomers(data);
+                const data = await itemService.getAll();
+                setItems(data);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -20,7 +20,7 @@ const useCustomers = () => {
 
         fetchData();
     }, []);
-    return { customers, error, isLoading, setCustomers, setError };
+    return { items, error, isLoading, setItems, setError };
 };
 
 export default useCustomers;

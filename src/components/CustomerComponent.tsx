@@ -1,58 +1,53 @@
-import {useRef} from "react";
+import { useRef } from "react";
 import useCustomers from "../hook/use-customer.ts";
-import customerService, {Customer} from "../service/customer-service";
-
+import customerService, { Customer } from "../service/customer-service";
 
 const CustomerComponent = () => {
     const idRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
-    const {customers, setCustomers} = useCustomers();
+    const { customers, setCustomers } = useCustomers();
 
-    console.log(customers);// why customer array is empty?
-
-    function handleAddOnClick() {
-        if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
-            alert("null");
-            return;
-        }
+    const handleAddOnClick = () => {
         const customer: Customer = {
-            id: idRef.current.value,
-            name: nameRef.current.value,
-            address: addressRef.current.value
+            id: idRef.current!.value,
+            name: nameRef.current!.value,
+            address: addressRef.current!.value,
         };
         customerService.create(customer);
         setCustomers([...customers, customer]);
-    }
+    };
 
-    function deleteCustomer(id: string) {
+    const deleteCustomer = (id: string) => {
         customerService.delete(id);
-        const updatedCustomers = customers.filter((customer) => customer.id !== id);
+        const updatedCustomers = customers.filter(
+            (customer) => customer.id !== id
+        );
         setCustomers(updatedCustomers);
-    }
+    };
 
-    function handleUpdateOnClick() {
-        if (idRef.current == null || nameRef.current == null || addressRef.current == null) {
-            alert("null");
-            return;
-        }
-
+    const handleUpdateOnClick = () => {
         const customer: Customer = {
-            id: idRef.current.value,
-            name: nameRef.current.value,
-            address: addressRef.current.value
+            id: idRef.current!.value,
+            name: nameRef.current!.value,
+            address: addressRef.current!.value,
         };
 
         customerService.update(customer.id, customer);
         const updatedCustomers = customers.map((customer) => {
-            return customer.id === customer.id ?
-                {...customer, name: customer.name, address: customer.address} : customer;
+            return customer.id === customer.id
+                ? {
+                      ...customer,
+                      name: customer.name,
+                      address: customer.address,
+                  }
+                : customer;
         });
         setCustomers(updatedCustomers);
-    }
+    };
 
-    function trOnClick(id: string) {
-        const customer = customers.find(c => c.id === id);
+    const trOnClick = (id: string) => {
+        const customer = customers.find((c) => c.id === id);
         if (!customer) {
             alert("null");
             return;
@@ -60,7 +55,7 @@ const CustomerComponent = () => {
         idRef.current!.value = customer.id;
         nameRef.current!.value = customer.name;
         addressRef.current!.value = customer.address;
-    }
+    };
 
     return (
         <>
@@ -104,10 +99,18 @@ const CustomerComponent = () => {
                 </div>
 
                 <div className="col-12 button-section">
-                    <button type="submit" className="btn btn-success" onClick={handleAddOnClick}>
+                    <button
+                        type="submit"
+                        className="btn btn-success"
+                        onClick={handleAddOnClick}
+                    >
                         Add
                     </button>
-                    <button type="submit" className="btn btn-primary" onClick={handleUpdateOnClick}>
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={handleUpdateOnClick}
+                    >
                         Update
                     </button>
                 </div>
@@ -124,26 +127,29 @@ const CustomerComponent = () => {
             </form>
             <table className="table table-hover">
                 <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Option</th>
-                </tr>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Option</th>
+                    </tr>
                 </thead>
                 <tbody id="customerTbl">
-                {customers.map((customer, index) => (
-                    <tr key={index} onClick={() => trOnClick(customer.id)}>
-                        <td>{customer.id}</td>
-                        <td>{customer.name}</td>
-                        <td>{customer.address}</td>
-                        <td>
-                            <button className="btn btn-danger" onClick={() => deleteCustomer(customer.id)}>
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                    {customers.map((customer, index) => (
+                        <tr key={index} onClick={() => trOnClick(customer.id)}>
+                            <td>{customer.id}</td>
+                            <td>{customer.name}</td>
+                            <td>{customer.address}</td>
+                            <td>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => deleteCustomer(customer.id)}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </>
